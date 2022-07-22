@@ -14,5 +14,7 @@
 
 ```
 
-## With these steps followed you should have you MicroSD cards ready for your cluster.
+
+## You should now have SD cards, ready to deploy :)
+
 
