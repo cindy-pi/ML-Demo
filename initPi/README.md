@@ -13,3 +13,6 @@
   ## Repeat steps for pi02 ... piNN, where NN is number of pis in your cluster.
 
 ```
+
+## With these steps followed you should have you MicroSD cards ready for your cluster.
+
