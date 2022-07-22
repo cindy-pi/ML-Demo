@@ -13,3 +13,6 @@
   ## Repeat steps for pi02 ... piNN, where NN is number of pis in your cluster.
 
 ```
+
+## You should now have SD cards, ready to deploy :)
+
