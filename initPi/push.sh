@@ -10,7 +10,7 @@ cp $VAR_SSH_PATH /Volumes/boot/authorized_keys
 cp ssh				/Volumes/boot
 cp unattended			/Volumes/boot
 
-sed -i 'bak' 's/init=\/usr\/lib\/raspi-config\/init_resize.sh/init=\/bin\/bash -c "mount -t proc proc \/proc; mount -t sysfs sys \/sys; mount \/boot; source \/boot\/unattended" /' /Volumes/boot/cmdline.txt
+sed -i 'bak' 's/init=\/usr\/lib\/raspi-config\/init_resize.sh/cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 init=\/bin\/bash -c "mount -t proc proc \/proc; mount -t sysfs sys \/sys; mount \/boot; source \/boot\/unattended" /' /Volumes/boot/cmdline.txt
 
 chmod 777 /Volumes/boot/firstboot.sh
 
