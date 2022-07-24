@@ -1,0 +1,47 @@
+- hosts: 
+    pi06.local
+  remote_user: pi
+  become: yes
+  become_method: sudo
+  vars:
+    pkgstoinstall: [ libffi-dev, libssl-dev, python3, python3-pip ]
+  tasks:
+    - name: Install a list of packages
+      apt:
+        name: "{{ pkgstoinstall }}"
+        update_cache: yes
+
+    - name: Remove python-configparser package
+      apt:
+        name: python-configparser
+        state: absent
+
+    - name: get docker convenience script
+      shell: curl -fsSL https://get.docker.com -o get-docker.sh
+      args:
+        creates: /home/pi/get-docker.sh
+
+    - name: Reboot the server
+      shell: "shutdown -r now "
+      async: 1
+      poll: 0
+
+    - name: Sleep for 300 seconds and continue with play
+      become: false
+      ansible.builtin.wait_for:
+        timeout: 60
+      delegate_to: localhost    
+
+    - name: install docker
+      shell: sh /home/pi/get-docker.sh
+      args:
+        creates: /usr/bin/docker
+
+    - name: make pi user execute docker commands
+      shell: usermod -aG docker pi
+
+    - name: install docker-compose
+      shell: pip3 -v install docker-compose
+      args:
+        creates: /usr/local/bin/docker-compose
+
