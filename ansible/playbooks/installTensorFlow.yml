@@ -1,0 +1,32 @@
+- name: This playbook will install Tensor Flow on Raspbian OS
+  hosts: pi05.local
+  remote_user: pi
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: "Step 1) Update Repository cache"
+      apt:
+        update_cache: true
+        cache_valid_time: 3600
+        force_apt_get: true
+
+    - name: "Step 2) Upgrade Respository"
+      apt:
+        upgrade: yes
+        force_apt_get: true
+
+    - name: "Step 3) Install libatlas-base-dev"
+      apt:
+        name: libatlas-base-dev
+        force_apt_get: true
+
+    - name: "Step 4) Install python3-pip"
+      apt:
+        name: python3-pip
+        force_apt_get: true
+
+    - name: "Step 5) Instrall TensorFlow pip"
+      shell:
+         "pip3 install --upgrade https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-1.9.0-py3-none-any.whl"
+
+
