@@ -1,5 +1,5 @@
 - hosts: 
-    pi06.local
+    pi10.local
   remote_user: pi
   become: yes
   become_method: sudo

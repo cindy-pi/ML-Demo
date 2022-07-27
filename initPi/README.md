@@ -7,7 +7,7 @@
   ## Burn your SD card using rapberry imager
   ## ReInsert you sd card
   ## Run command below with new host name (ex. pi01)
-  ./push.sh {Your House SSID} {Your House SSID Password} {Path to Your SSH Public Key File} pi01
+  ./push.sh {Your House SSID} {Your House SSID Password} {Path to Your SSH Public Key File} {Path to boot Mount Point} pi01
   ## Eject your SD card
   ## Now you SD card is ready for pi cluster as pi01
   ## Repeat steps for pi02 ... piNN, where NN is number of pis in your cluster.
