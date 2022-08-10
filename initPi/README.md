@@ -10,6 +10,8 @@
   ./push.sh {Your House SSID} {Your House SSID Password} {Path to Your SSH Public Key File} {Path to boot Mount Point} pi01 {ETH0 IP}
 
   ex. ./push.sh myhome secret ../keys/id_rsa /Volumes/boot pi01 10.10.10.11
+  ex. ./push.sh myhome secret ../keys/id_rsa /Volumes/boot pi02 10.10.10.12
+  ex. ./push.sh myhome secret ../keys/id_rsa /Volumes/boot pi03 10.10.10.13
 
   ## Eject your SD card
   ## Now you SD card is ready for pi cluster as pi01

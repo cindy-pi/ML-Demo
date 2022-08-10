@@ -12,7 +12,7 @@ chmod 600 /home/pi/.ssh/authorized_keys
 chown pi /home/pi/.ssh/authorized_keys
 
 export CMDLINE=`cat /boot/cmdline.txt`
-export CMDLINE=$CMDLINE" ip=VAR_HOSTIP::0.0.0.0:255.255.2555.0:VAR_HOSTNAME:eth0:off"
+export CMDLINE=$CMDLINE" ip=VAR_HOSTIP::0.0.0.0:255.255.255.0:VAR_HOSTNAME:eth0:off"
 echo $CMDLINE > /boot/cmdline.txt
 
 echo "arm_64bit=1" >> /boot/config.txt
