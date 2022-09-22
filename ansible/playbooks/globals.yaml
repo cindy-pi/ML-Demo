@@ -1,0 +1,5 @@
+
+# Combine multiple playbooks
+  - import_playbook: manager-provision.yaml
+  - import_playbook: worker-provision.yaml
+

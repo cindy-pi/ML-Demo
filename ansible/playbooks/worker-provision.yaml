@@ -1,0 +1,56 @@
+---
+- name: Run apt-get update
+  hosts: worker
+  gather_facts: no
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: Test for raspberry pi /proc/cpuinfo
+      command: grep -E "Raspberry Pi|BCM2708|BCM2709|BCM2835|BCM2836" /proc/cpuinfo
+      register: grep_cpuinfo_raspberrypi
+      failed_when: false
+      changed_when: false
+
+    - name: Activating cgroup support
+      lineinfile:
+        path: /boot/cmdline.txt
+        regexp: '^((?!.*\bcgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory\b).*)$'
+        line: '\1 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory'
+        backrefs: true
+      notify: reboot
+
+    - name: "Update Repository cache"
+      apt:
+        update_cache: true
+        cache_valid_time: 3600
+        force_apt_get: true
+
+    - name: "Install buildah"
+      shell: sudo apt-get -y install buildah
+      args:
+        creates: /usr/bin/buildah
+
+    - name: "Install k3s"
+      shell: "{{ hostvars['transfer_variable']['k8s_join_command'] }} "
+      args:
+        creates: /usr/local/bin/kubectl
+
+    - name: "Install buildah"
+      shell: sudo mkdir /etc/rancher/k3s/
+      args:
+        creates: /etc/rancher/k3s
+
+    - name: "Push Internal kubeconfig file"
+      ansible.builtin.copy:
+        src: files/internal.kubeconfig
+        dest: /etc/rancher/k3s/k3s.yaml
+        mode: '744'
+
+  handlers:
+    - name: Restart apache
+      ansible.builtin.service:
+        name: httpd
+        state: restarted
+
+    - name: reboot
+      reboot:

@@ -27,6 +27,11 @@ Once ansible is installed you can verify with the following command
 ansible [core 2.13.4]
 ```
 
+run
+```
+ansible-playbook playbooks/ping-example-playbook.yaml
+```
+
 
 
 
