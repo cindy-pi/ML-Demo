@@ -4,7 +4,16 @@
 ## How it works
 
 ```
-  ## Burn your SD card using rapberry imager
+  ## If you have not ssh keys run the following:
+  ##   ssh-keygen -f ../keys/id_rsa -t rsa -N ""
+  ## Then create you authorized keys file using folloiwng command:
+  ##   cat ../keys/*.pub > ../keys/authorized_keys
+  ##   chmod 644 ../keys/authorized_keys
+  ##
+  ## Burn your SD card using rapberry imager (Ref: https://www.raspberrypi.com/software/)A
+  ##   You will want to burn the following OS:
+  ##     - Raspberry Pi OS (Other)
+  ##       - Raspberry PI OS LITE (64-bit)
   ## ReInsert you sd card
   ## Run command below with new host name (ex. pi01)
   ./push.sh {Your House SSID} {Your House SSID Password} {Path to Your SSH Public Key File} {Path to boot Mount Point} pi01 {ETH0 IP}

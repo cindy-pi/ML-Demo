@@ -1,0 +1,96 @@
+---
+- name: Run apt-get update
+  hosts: manager
+  gather_facts: no
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: Test for raspberry pi /proc/cpuinfo
+      command: grep -E "Raspberry Pi|BCM2708|BCM2709|BCM2835|BCM2836" /proc/cpuinfo
+      register: grep_cpuinfo_raspberrypi
+      failed_when: false
+      changed_when: false
+
+    - name: Activating cgroup support
+      lineinfile:
+        path: /boot/cmdline.txt
+        regexp: '^((?!.*\bcgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory\b).*)$'
+        line: '\1 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory'
+        backrefs: true
+      notify: reboot
+
+    - name: "Update Repository cache"
+      apt:
+        update_cache: true
+        cache_valid_time: 3600
+        force_apt_get: true
+
+    - name: "Install git"
+      shell: sudo apt-get -y install git
+      args:
+        creates: /usr/bin/git
+
+    - name: "Install buildah"
+      shell: mkdir -p docker; git clone https://github.com/pimoroni/blinkt.git
+      args:
+        creates: docker/blinkt
+
+    - name: "Install buildah"
+      shell: sudo apt-get -y install buildah
+      args:
+        creates: /usr/bin/buildah
+
+    - name: "Install k3s"
+      shell: curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="644" sh - ; sudo chmod 644 /etc/rancher/k3s/k3s.yaml
+      args:
+        creates: /usr/local/bin/kubectl
+
+    - name: "Register the k8s token"
+      shell: echo "curl -sfL https://get.k3s.io | K3S_URL=https://"`ifconfig eth0 | grep 'inet ' | awk '{print $2}'`":6443 K3S_TOKEN="`cat /var/lib/rancher/k3s/server/node-token`" sh -"
+      register: k8s_join_command
+
+    - name: "Register k8s Token for Transfer to other playbooks"
+      add_host:
+        name: "transfer_variable"
+        k8s_join_command: " {{ k8s_join_command.stdout }}"
+    - debug: msg="{{ hostvars['transfer_variable'] }}"
+
+    - name: "Copy generate_kubeconfig.sh to Manager Node"
+      ansible.builtin.copy:
+        src: files/generate_kubeconfig.sh
+        dest: ./generate_kubeconfig.sh
+        mode: '777'
+
+    - name: "Generate Internal and External kubecongig files"
+      shell: ./generate_kubeconfig.sh
+      args:
+        creates: ./internal.kubeconfig
+
+    - name: "Copy internal.kubeconfig to localhost"
+      ansible.builtin.fetch:
+        src: ./internal.kubeconfig
+        dest: files/internal.kubeconfig
+        mode: '700'
+        flat: yes
+
+    - name: "Copy external_config.config to localhost"
+      ansible.builtin.fetch:
+        src: ./external.kubeconfig
+        dest: files/external.kubeconfig
+        mode: '700'
+        flat: yes
+
+    - name: Print all available facts
+      ansible.builtin.debug:
+        var: ansible_facts
+
+  handlers:
+    - name: Restart apache
+      ansible.builtin.service:
+        name: httpd
+        state: restarted
+
+    - name: reboot
+      reboot:
+
+
