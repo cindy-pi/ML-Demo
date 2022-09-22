@@ -29,7 +29,7 @@ ansible [core 2.13.4]
 
 run
 ```
-ansible-playbook playbooks/ping-example-playbook.yaml
+ansible-playbook playbooks/globals.yaml
 ```
 
 

@@ -19,11 +19,10 @@
         backrefs: true
       notify: reboot
 
-    - name: "Update Repository cache"
-      apt:
-        update_cache: true
-        cache_valid_time: 3600
-        force_apt_get: true
+    - name: "Install git"
+      shell: sudo apt-get -y install git
+      args:
+        creates: /usr/bin/git
 
     - name: "Install buildah"
       shell: sudo apt-get -y install buildah
