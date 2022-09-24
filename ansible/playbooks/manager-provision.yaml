@@ -1,5 +1,5 @@
 ---
-- name: Run apt-get update
+- name: Running Manager Node Playbook
   hosts: manager
   gather_facts: no
   become: yes
@@ -25,13 +25,19 @@
         cache_valid_time: 3600
         force_apt_get: true
 
+
     - name: "Install git"
       shell: sudo apt-get -y install git
       args:
         creates: /usr/bin/git
 
-    - name: "Install buildah"
-      shell: mkdir -p docker; git clone https://github.com/pimoroni/blinkt.git
+    - name: "Install blinkt git repo"
+      become_user: pi
+      shell: |
+        pwd;
+        mkdir -p docker;
+        cd docker;
+        git clone https://github.com/pimoroni/blinkt.git
       args:
         creates: docker/blinkt
 
@@ -40,6 +46,14 @@
       args:
         creates: /usr/bin/buildah
 
+    - name: "Install docker"
+      shell: sudo curl -fsSL https://get.docker.com | sh -
+      args:
+        creates: /usr/bin/docker
+
+    - name: "Grant docker rights to pi user"
+      shell: sudo usermod -aG docker pi
+
     - name: "Install k3s"
       shell: curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="644" sh - ; sudo chmod 644 /etc/rancher/k3s/k3s.yaml
       args:
@@ -47,13 +61,14 @@
 
     - name: "Register the k8s token"
       shell: echo "curl -sfL https://get.k3s.io | K3S_URL=https://"`ifconfig eth0 | grep 'inet ' | awk '{print $2}'`":6443 K3S_TOKEN="`cat /var/lib/rancher/k3s/server/node-token`" sh -"
+      args:
+        creates: /var/lib/rancher/k3s/server/node-token
       register: k8s_join_command
 
-    - name: "Register k8s Token for Transfer to other playbooks"
+    - name: "Register k8s Token for Transfer to other playbooks "
       add_host:
         name: "transfer_variable"
         k8s_join_command: " {{ k8s_join_command.stdout }}"
-    - debug: msg="{{ hostvars['transfer_variable'] }}"
 
     - name: "Copy generate_kubeconfig.sh to Manager Node"
       ansible.builtin.copy:
@@ -80,9 +95,23 @@
         mode: '700'
         flat: yes
 
-    - name: Print all available facts
-      ansible.builtin.debug:
-        var: ansible_facts
+    - name: "Install k9s"
+      shell: |
+        sudo curl -sS https://webi.sh/k9s | sh - 
+        sudo cp ~/.local/opt/k9s-v0.26.5/bin/k9s /usr/bin/k9s
+      args:
+        creates: /usr/bin/k9s
+
+    - name: "Push Internal kubeconfig file"
+      ansible.builtin.copy:
+        src: files/internal.kubeconfig
+        dest: /etc/rancher/k3s/k3s.interal.yaml
+        mode: '744'
+
+    - name: "Add config file to .bash_profile"
+      become_user: pi
+      shell: echo "/bin/bash ; export KUBECONFIG=/etc/rancher/k3s/k3s.internal.yaml" > ~/.bash_profile
+
 
   handlers:
     - name: Restart apache

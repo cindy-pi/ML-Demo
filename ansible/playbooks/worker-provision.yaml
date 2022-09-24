@@ -1,5 +1,5 @@
 ---
-- name: Run apt-get update
+- name: Running Worker Node Playbook
   hosts: worker
   gather_facts: no
   become: yes
@@ -44,6 +44,18 @@
         src: files/internal.kubeconfig
         dest: /etc/rancher/k3s/k3s.yaml
         mode: '744'
+
+    - name: "Add config file to .bash_profile"
+      become_user: pi
+      shell: echo "export KUBECONFIG=/etc/rancher/k3s/k3s.yaml" > ~/.bash_profile
+
+    - name: "Install k9s"
+      shell: |
+        sudo curl -sS https://webi.sh/k9s | sh -
+        sudo cp ~/.local/opt/k9s-v0.26.5/bin/k9s /usr/bin/k9s
+      args:
+        creates: /usr/bin/k9s
+
 
   handlers:
     - name: Restart apache
