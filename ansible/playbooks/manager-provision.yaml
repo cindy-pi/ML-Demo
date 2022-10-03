@@ -148,7 +148,9 @@
 
     - name: "Build and Start blinkt kube monitor"
       become_user: pi
-      shell: cd kube-blinkt ; ./build.sh 2> output.log
+      shell: sudo -u pi bash -c 'kube-blinkt/deploy.sh '
+      args:
+        executable: /bin/bash
 
 
 
