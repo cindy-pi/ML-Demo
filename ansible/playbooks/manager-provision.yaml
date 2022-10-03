@@ -61,9 +61,9 @@
 
     - name: "Register the k8s token"
       shell: echo "curl -sfL https://get.k3s.io | K3S_URL=https://"`ifconfig eth0 | grep 'inet ' | awk '{print $2}'`":6443 K3S_TOKEN="`cat /var/lib/rancher/k3s/server/node-token`" sh -"
-      args:
-        creates: /var/lib/rancher/k3s/server/node-token
       register: k8s_join_command
+    - debug:
+        var: k8s_join_command
 
     - name: "Register k8s Token for Transfer to other playbooks "
       add_host:
@@ -155,11 +155,6 @@
 
 
   handlers:
-    - name: Restart apache
-      ansible.builtin.service:
-        name: httpd
-        state: restarted
-
     - name: reboot
       reboot:
 

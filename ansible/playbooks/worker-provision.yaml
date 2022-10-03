@@ -41,7 +41,7 @@
         creates: /usr/local/bin/kubectl
 
     - name: "Install buildah"
-      shell: sudo mkdir /etc/rancher/k3s/
+      shell: sudo mkdir -p /etc/rancher/k3s/
       args:
         creates: /etc/rancher/k3s
 
@@ -69,16 +69,10 @@
       shell: |
         sudo curl -sS https://webi.sh/k9s | sh -
         sudo cp ~/.local/opt/*/bin/k9s /usr/bin/k9s
-
       args:
         creates: /usr/bin/k9s
 
-
   handlers:
-    - name: Restart apache
-      ansible.builtin.service:
-        name: httpd
-        state: restarted
-
     - name: reboot
       reboot:
+
