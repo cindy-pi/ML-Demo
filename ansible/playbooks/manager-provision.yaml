@@ -17,7 +17,6 @@
         regexp: '^((?!.*\bcgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory\b).*)$'
         line: '\1 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory'
         backrefs: true
-      notify: reboot
 
     - name: "Update Repository cache"
       apt:
@@ -122,12 +121,6 @@
     - name: "Restart k3s node"
       shell: systemctl restart k3s
 
-    - name: "Copy kube-blinkt to Manager Node"
-      ansible.builtin.copy:
-        src: kube-blinkt/
-        dest: ./kube-blinkt
-        mode: '777'
-
     - name: "Install k9s"
       shell: |
         sudo curl -sS https://webi.sh/k9s | sh - 
@@ -146,16 +139,16 @@
       become_user: pi
       shell: echo ". ~/.profile ; export KUBECONFIG=/etc/rancher/k3s/k3s.internal.yaml" > ~/.bash_profile
 
+    - name: "Copy kube-blinkt to Manager Node"
+      become_user: pi
+      ansible.builtin.copy:
+        src: kube-blinkt/
+        dest: ./kube-blinkt
+        mode: '777'
+
     - name: "Build and Start blinkt kube monitor"
       become_user: pi
-      shell: |
-        . ~/.profile 
-        cd ~/kube-blinkt 
-        ./build.sh
+      shell: cd kube-blinkt ; ./build.sh 2> output.log
 
-
-  handlers:
-    - name: reboot
-      reboot:
 
 
