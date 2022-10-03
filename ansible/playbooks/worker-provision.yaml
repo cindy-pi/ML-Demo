@@ -19,6 +19,12 @@
         backrefs: true
       notify: reboot
 
+    - name: "Update Repository cache"
+      apt:
+        update_cache: true
+        cache_valid_time: 3600
+        force_apt_get: true
+
     - name: "Install git"
       shell: sudo apt-get -y install git
       args:
@@ -45,14 +51,23 @@
         dest: /etc/rancher/k3s/k3s.yaml
         mode: '744'
 
+    - name: "Push privateRepo.yaml"
+      ansible.builtin.copy:
+        src: files/privateRepo.yaml
+        dest: /etc/rancher/k3s/registries.yaml
+        mode: '744'
+
+    - name: "Restart k3s node"
+      shell: systemctl restart k3s-agent
+
     - name: "Add config file to .bash_profile"
       become_user: pi
-      shell: echo "export KUBECONFIG=/etc/rancher/k3s/k3s.yaml" > ~/.bash_profile
+      shell: echo ". ./.profile ; export KUBECONFIG=/etc/rancher/k3s/k3s.yaml" > ~/.bash_profile
 
     - name: "Install k9s"
       shell: |
         sudo curl -sS https://webi.sh/k9s | sh -
-        sudo cp ~/.local/opt/k9s-v0.26.5/bin/k9s /usr/bin/k9s
+        sudo cp ~/.local/opt/*/bin/k9s /usr/bin/k9s
       args:
         creates: /usr/bin/k9s
 

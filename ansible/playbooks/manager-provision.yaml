@@ -74,10 +74,21 @@
         dest: ./generate_kubeconfig.sh
         mode: '777'
 
+    - name: "Copy k3s_build_private_repo_yaml.sh to Manager Node"
+      ansible.builtin.copy:
+        src: files/k3s_build_private_repo_yaml.sh
+        dest: ./k3s_build_private_repo_yaml.sh
+        mode: '777'
+
     - name: "Generate Internal and External kubecongig files"
       shell: ./generate_kubeconfig.sh
       args:
         creates: ./internal.kubeconfig
+
+    - name: "Configure k3s to see private manager repo"
+      shell: ./k3s_build_private_repo_yaml.sh
+      args:
+        creates: ./privateRepo.yaml
 
     - name: "Copy internal.kubeconfig to localhost"
       ansible.builtin.fetch:
@@ -93,10 +104,32 @@
         mode: '700'
         flat: yes
 
+    - name: "Copy privateRepo.yaml to localhost"
+      ansible.builtin.fetch:
+        src: ./privateRepo.yaml
+        dest: files/privateRepo.yaml
+        mode: '700'
+        flat: yes
+
+    - name: "Push privateRepo.yaml"
+      ansible.builtin.copy:
+        src: files/privateRepo.yaml
+        dest: /etc/rancher/k3s/registries.yaml
+        mode: '744'
+
+    - name: "Restart k3s node"
+      shell: systemctl restart k3s
+
+    - name: "Copy kube-blinkt to Manager Node"
+      ansible.builtin.copy:
+        src: kube-blinkt/
+        dest: ./kube-blinkt
+        mode: '777'
+
     - name: "Install k9s"
       shell: |
         sudo curl -sS https://webi.sh/k9s | sh - 
-        sudo cp ~/.local/opt/k9s-v0.26.5/bin/k9s /usr/bin/k9s
+        sudo cp ~/.local/opt/*/bin/k9s /usr/bin/k9s
       args:
         creates: /usr/bin/k9s
 
@@ -110,8 +143,12 @@
       become_user: pi
       shell: echo ". ~/.profile ; export KUBECONFIG=/etc/rancher/k3s/k3s.internal.yaml" > ~/.bash_profile
 
-
-
+    - name: "Build and Start blinkt kube monitor"
+      become_user: pi
+      shell: |
+        . ~/.profile 
+        cd ~/kube-blinkt 
+        ./build.sh
 
   handlers:
     - name: Restart apache

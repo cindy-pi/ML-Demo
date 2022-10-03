@@ -18,6 +18,8 @@ RUN echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] htt
 RUN apt-get update
 RUN apt-get install -y kubectl
 
+COPY --chown=root:root main.py /src/
+
 WORKDIR /src
 
 VOLUME ["/src"]
