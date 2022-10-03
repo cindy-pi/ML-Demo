@@ -64,10 +64,12 @@
       become_user: pi
       shell: echo ". ./.profile ; export KUBECONFIG=/etc/rancher/k3s/k3s.yaml" > ~/.bash_profile
 
+
     - name: "Install k9s"
       shell: |
         sudo curl -sS https://webi.sh/k9s | sh -
         sudo cp ~/.local/opt/*/bin/k9s /usr/bin/k9s
+
       args:
         creates: /usr/bin/k9s
 
