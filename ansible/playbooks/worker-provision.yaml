@@ -64,6 +64,7 @@
       become_user: pi
       shell: echo ". ./.profile ; export KUBECONFIG=/etc/rancher/k3s/k3s.yaml" > ~/.bash_profile
 
+
     - name: "Install k9s"
       ansible.builtin.copy:
         src: files/k9s

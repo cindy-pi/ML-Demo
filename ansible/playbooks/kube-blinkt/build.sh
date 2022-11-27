@@ -1,5 +1,4 @@
 
-cd /home/pi/kube-blinkt
 
 export k8sManager=`ifconfig eth0  | grep 'inet ' | awk '{print $2}'`
 export registryStatus=`docker ps | grep registry | wc -l`

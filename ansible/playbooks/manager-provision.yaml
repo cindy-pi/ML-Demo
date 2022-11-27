@@ -51,6 +51,8 @@
 
     - name: "Register the k8s token"
       shell: echo "curl -sfL https://get.k3s.io | K3S_URL=https://"`ifconfig eth0 | grep 'inet ' | awk '{print $2}'`":6443 K3S_TOKEN="`cat /var/lib/rancher/k3s/server/node-token`" sh -"
+      args:
+        creates: /var/lib/rancher/k3s/server/node-token
       register: k8s_join_command
 
     - name: "Register k8s Token for Transfer to other playbooks "
@@ -116,6 +118,14 @@
     - name: "Add config file to .bash_profile"
       become_user: pi
       shell: echo ". ~/.profile ; export KUBECONFIG=/etc/rancher/k3s/k3s.internal.yaml" > ~/.bash_profile
+
+    - name: "Build and Start blinkt kube monitor"
+      become_user: pi
+      shell: |
+        . ~/.profile 
+        cd ~/kube-blinkt 
+        ./build.sh
+
 
   handlers:
     - name: reboot
