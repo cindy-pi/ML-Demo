@@ -5,7 +5,7 @@ import time
 
 if __name__ == "__main__":
     blinkt.set_clear_on_exit(True)
-    blinkt.set_brightness(0.5)
+    blinkt.set_brightness(0.2)
 
     i = 0
 
@@ -14,5 +14,5 @@ if __name__ == "__main__":
         blinkt.set_pixel(i % 8, 0, 255, 0)
         blinkt.show()
 
-        time.sleep(1)
+        time.sleep(0.2)
         i += 1

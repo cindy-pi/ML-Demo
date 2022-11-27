@@ -30,3 +30,6 @@ docker tag kube-blinkt-clear $k8sManager:5000/kube-blinkt:clear
 docker push $k8sManager:5000/kube-blinkt:clear
 ./deploy-kube-blinkt.sh
 
+kubectl patch daemonset -n default blinkt -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"`date +'%s'`\"}}}}}"
+
+
