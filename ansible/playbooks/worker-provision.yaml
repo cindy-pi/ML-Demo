@@ -65,12 +65,20 @@
       shell: echo ". ./.profile ; export KUBECONFIG=/etc/rancher/k3s/k3s.yaml" > ~/.bash_profile
 
     - name: "Install k9s"
-      shell: |
-        sudo curl -sS https://webi.sh/k9s | sh -
-        sudo cp ~/.local/opt/*/bin/k9s /usr/bin/k9s
-      args:
-        creates: /usr/bin/k9s
+      ansible.builtin.copy:
+        src: files/k9s
+        dest: /usr/bin/k9s
+        mode: '777'
 
+    - name: "Push Internal kubeconfig file"
+      ansible.builtin.copy:
+        src: files/internal.kubeconfig
+        dest: /etc/rancher/k3s/k3s.internal.yaml
+        mode: '744'
+
+    - name: "Add config file to .bash_profile"
+      become_user: pi
+      shell: echo ". ~/.profile ; export KUBECONFIG=/etc/rancher/k3s/k3s.internal.yaml" > ~/.bash_profile
 
   handlers:
     - name: Restart apache
