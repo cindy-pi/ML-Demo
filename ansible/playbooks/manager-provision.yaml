@@ -25,20 +25,10 @@
         force_apt_get: true
 
 
-    - name: "Install git"
+    - name: "Install git, if want to play with code"
       shell: sudo apt-get -y install git
       args:
         creates: /usr/bin/git
-
-    - name: "Install blinkt git repo"
-      become_user: pi
-      shell: |
-        pwd;
-        mkdir -p docker;
-        cd docker;
-        git clone https://github.com/pimoroni/blinkt.git
-      args:
-        creates: docker/blinkt
 
     - name: "Install buildah"
       shell: sudo apt-get -y install buildah
@@ -105,12 +95,14 @@
         mode: '700'
         flat: yes
 
-    - name: "Copy privateRepo.yaml to localhost"
-      ansible.builtin.fetch:
-        src: ./privateRepo.yaml
-        dest: files/privateRepo.yaml
-        mode: '700'
-        flat: yes
+    - name: "Copy kube-blinkt from local to Manager Node"
+      ansible.builtin.copy:
+        src: kube-blinkt/
+        dest: ./kube-blinkt/
+        mode: '777'
+
+    - name: "Deploy private repo and enable docker to auto restart"
+      shell: ./kube-blinkt/build.sh
 
     - name: "Push privateRepo.yaml"
       ansible.builtin.copy:
@@ -122,12 +114,10 @@
       shell: systemctl restart k3s
 
     - name: "Install k9s"
-      shell: |
-        sudo curl -sS https://webi.sh/k9s | sh - 
-        sudo cp ~/.local/opt/*/bin/k9s /usr/bin/k9s
-
-      args:
-        creates: /usr/bin/k9s
+      ansible.builtin.copy:
+        src: files/k9s
+        dest: /usr/bin/k9s
+        mode: '777'
 
     - name: "Push Internal kubeconfig file"
       ansible.builtin.copy:
@@ -139,18 +129,16 @@
       become_user: pi
       shell: echo ". ~/.profile ; export KUBECONFIG=/etc/rancher/k3s/k3s.internal.yaml" > ~/.bash_profile
 
-    - name: "Copy kube-blinkt to Manager Node"
-      become_user: pi
-      ansible.builtin.copy:
-        src: kube-blinkt/
-        dest: ./kube-blinkt
-        mode: '777'
-
     - name: "Build and Start blinkt kube monitor"
       become_user: pi
-      shell: sudo -u pi bash -c 'kube-blinkt/deploy.sh '
-      args:
-        executable: /bin/bash
+      shell: |
+        . ~/.profile 
+        cd ~/kube-blinkt 
+        ./build.sh
 
+
+  handlers:
+    - name: reboot
+      reboot:
 
 
