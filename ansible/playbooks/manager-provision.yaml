@@ -17,7 +17,6 @@
         regexp: '^((?!.*\bcgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory\b).*)$'
         line: '\1 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory'
         backrefs: true
-      notify: reboot
 
     - name: "Update Repository cache"
       apt:
@@ -51,9 +50,9 @@
 
     - name: "Register the k8s token"
       shell: echo "curl -sfL https://get.k3s.io | K3S_URL=https://"`ifconfig eth0 | grep 'inet ' | awk '{print $2}'`":6443 K3S_TOKEN="`cat /var/lib/rancher/k3s/server/node-token`" sh -"
-      args:
-        creates: /var/lib/rancher/k3s/server/node-token
       register: k8s_join_command
+    - debug:
+        var: k8s_join_command
 
     - name: "Register k8s Token for Transfer to other playbooks "
       add_host:
@@ -66,10 +65,21 @@
         dest: ./generate_kubeconfig.sh
         mode: '777'
 
+    - name: "Copy k3s_build_private_repo_yaml.sh to Manager Node"
+      ansible.builtin.copy:
+        src: files/k3s_build_private_repo_yaml.sh
+        dest: ./k3s_build_private_repo_yaml.sh
+        mode: '777'
+
     - name: "Generate Internal and External kubecongig files"
       shell: ./generate_kubeconfig.sh
       args:
         creates: ./internal.kubeconfig
+
+    - name: "Configure k3s to see private manager repo"
+      shell: ./k3s_build_private_repo_yaml.sh
+      args:
+        creates: ./privateRepo.yaml
 
     - name: "Copy internal.kubeconfig to localhost"
       ansible.builtin.fetch:

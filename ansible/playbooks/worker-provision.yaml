@@ -41,7 +41,7 @@
         creates: /usr/local/bin/kubectl
 
     - name: "Install buildah"
-      shell: sudo mkdir /etc/rancher/k3s/
+      shell: sudo mkdir -p /etc/rancher/k3s/
       args:
         creates: /etc/rancher/k3s
 
@@ -82,10 +82,6 @@
       shell: echo ". ~/.profile ; export KUBECONFIG=/etc/rancher/k3s/k3s.internal.yaml" > ~/.bash_profile
 
   handlers:
-    - name: Restart apache
-      ansible.builtin.service:
-        name: httpd
-        state: restarted
-
     - name: reboot
       reboot:
+

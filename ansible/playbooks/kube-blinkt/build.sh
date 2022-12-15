@@ -1,6 +1,21 @@
+#!/bin/bash
+echo "Running Docker Check"
+. ~/.profile
+export PATH=/usr/sbin/:$PATH
+export dockerUp=`sudo systemctl status docker | grep "active (running)" | wc -l`
 
 
 cd /home/pi/kube-blinkt
+if [ "$dockerUp" != "1" ] ; then
+  echo "Running Docker Reset" 
+  sudo rm -rf /etc/docker/daemon.json
+  sudo systemctl stop docker.socket
+  sudo systemctl stop docker.service
+  sudo service docker stop
+  sudo service docker start
+fi
+
+echo "Running Registry Check"
 export k8sManager=`ifconfig eth0  | grep 'inet ' | awk '{print $2}'`
 export registryStatus=`docker ps | grep registry | wc -l`
 
@@ -20,7 +35,6 @@ else
   echo Registry is already running
 fi
 
-
 docker build -t kube-blinkt .
 docker tag kube-blinkt $k8sManager:5000/kube-blinkt:latest
 docker push $k8sManager:5000/kube-blinkt:latest
@@ -31,5 +45,4 @@ docker push $k8sManager:5000/kube-blinkt:clear
 ./deploy-kube-blinkt.sh
 
 kubectl patch daemonset -n default blinkt -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"`date +'%s'`\"}}}}}"
-
 
