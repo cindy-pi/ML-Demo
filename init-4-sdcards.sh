@@ -46,8 +46,8 @@ mount /dev/sdd1 /mnt/sdd
 
 ./push.sh $WIFI_SSID $WIFI_PASS $SSH_KEY /mnt/sda pi11 10.10.10.11
 ./push.sh $WIFI_SSID $WIFI_PASS $SSH_KEY /mnt/sdb pi12 10.10.10.12
-./push.sh $WIFI_SSID $WIFI_PASS $SSH_KEY /mnt/sdc pi12 10.10.10.13
-./push.sh $WIFI_SSID $WIFI_PASS $SSH_KEY /mnt/sdd pi12 10.10.10.14
+./push.sh $WIFI_SSID $WIFI_PASS $SSH_KEY /mnt/sdc pi13 10.10.10.13
+./push.sh $WIFI_SSID $WIFI_PASS $SSH_KEY /mnt/sdd pi14 10.10.10.14
 
 umount /mnt/sda
 umount /mnt/sdb
