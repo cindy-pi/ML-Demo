@@ -95,15 +95,6 @@
         mode: '700'
         flat: yes
 
-    - name: "Copy kube-blinkt from local to Manager Node"
-      ansible.builtin.copy:
-        src: kube-blinkt/
-        dest: ./kube-blinkt/
-        mode: '777'
-
-    - name: "Deploy private repo and enable docker to auto restart"
-      shell: ./kube-blinkt/build.sh
-
     - name: "Push privateRepo.yaml"
       ansible.builtin.copy:
         src: files/privateRepo.yaml
