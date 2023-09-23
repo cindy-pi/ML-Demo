@@ -8,12 +8,14 @@ export RASPOS_IMG=2023-05-03-raspios-bullseye-arm64-lite
 export WIFI_SSID=******
 export WIFI_PASS=******
 export SSH_KEY=../keys/authorized_keys
+export PIUSER_PASS=tester
 
 lsblk
 mkdir git
 cd git
 git clone https://github.com/cindy-pi/ML-Demo.git
 cd ML-Demo/initPi
+echo $PIUSER_PASS | openssl passwd -6 -stdin | xargs -I % echo "pi:"% > userconf.txt
 ssh-keygen -f ../keys/id_rsa -t rsa -N ""
 cat ../keys/*.pub > ../keys/authorized_keys
 chmod 644 ../keys/authorized_keys
