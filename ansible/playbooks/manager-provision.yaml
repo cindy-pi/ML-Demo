@@ -129,13 +129,6 @@
       become_user: pi
       shell: echo ". ~/.profile ; export KUBECONFIG=/etc/rancher/k3s/k3s.internal.yaml" > ~/.bash_profile
 
-    - name: "Build and Start blinkt kube monitor"
-      become_user: pi
-      shell: |
-        . ~/.profile 
-        cd ~/kube-blinkt 
-        ./build.sh
-
 
   handlers:
     - name: reboot
