@@ -19,6 +19,8 @@ XKBOPTIONS=
 BACKSPACE=guess
 EOF
 
+rm /etc/profile.d/raspi-config.sh
+
 export CMDLINE=`cat /boot/cmdline.txt`
 export CMDLINE=$CMDLINE" ip=VAR_HOSTIP::0.0.0.0:255.255.255.0:VAR_HOSTNAME:eth0:off"
 echo $CMDLINE > /boot/cmdline.txt
