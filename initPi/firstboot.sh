@@ -11,12 +11,13 @@ cp /boot/authorized_keys /home/pi/.ssh/authorized_keys
 chmod 600 /home/pi/.ssh/authorized_keys
 chown pi /home/pi/.ssh/authorized_keys
 
+
 cat <<EOF > /etc/default/keyboard
-XKBMODEL=pc105
-XKBLAYOUT=us
-XKBVARIANT=
-XKBOPTIONS=
-BACKSPACE=guess
+XKBMODEL="pc105"
+XKBLAYOUT="us"
+XKBVARIANT=""
+XKBOPTIONS=""
+BACKSPACE="guess"
 EOF
 
 rm /etc/profile.d/raspi-config.sh
