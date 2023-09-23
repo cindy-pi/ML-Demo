@@ -9,8 +9,8 @@ export SSH_KEY=../keys/authorized_keys
 lsblk
 mkdir git
 cd git
-cd ML-Demo/initPi
 git clone https://github.com/cindy-pi/ML-Demo.git
+cd ML-Demo/initPi
 ssh-keygen -f ../keys/id_rsa -t rsa -N ""
 cat ../keys/*.pub > ../keys/authorized_keys
 chmod 644 ../keys/authorized_keys
