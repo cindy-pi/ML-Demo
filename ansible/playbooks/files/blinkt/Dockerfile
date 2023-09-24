@@ -22,5 +22,6 @@ RUN pip3 install blinkt
 
 WORKDIR /opt/python/venv
 
-COPY main.py .
+COPY setLights.py .
+COPY monitor.sh .
 
