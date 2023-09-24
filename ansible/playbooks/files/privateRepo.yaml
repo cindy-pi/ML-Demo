@@ -1,8 +1,0 @@
-mirrors:
-  manager.registry.private:
-    endpoint:
-      - "http://10.10.10.11:5000"
-configs:
-  "manager.registry.private":
-    tls:
-      insecure_skip_verify: true

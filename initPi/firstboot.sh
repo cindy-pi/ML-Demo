@@ -22,6 +22,10 @@ EOF
 
 rm /etc/profile.d/raspi-config.sh
 
+sudo sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+sudo locale-gen
+
+
 export CMDLINE=`cat /boot/cmdline.txt`
 export CMDLINE=$CMDLINE" ip=VAR_HOSTIP::0.0.0.0:255.255.255.0:VAR_HOSTNAME:eth0:off"
 echo $CMDLINE > /boot/cmdline.txt

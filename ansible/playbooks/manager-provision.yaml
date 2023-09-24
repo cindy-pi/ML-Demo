@@ -120,6 +120,15 @@
       become_user: pi
       shell: echo ". ~/.profile ; export KUBECONFIG=/etc/rancher/k3s/k3s.internal.yaml" > ~/.bash_profile
 
+    - name: "Copy deployRegistry.sh to Manager Node"
+      ansible.builtin.copy:
+        src: files/deployRegistry.sh
+        dest: ./deployRegistry.sh
+        mode: '777'
+
+    - name: "Deploy Private Docker repo"
+      shell: ./deployRegistry.sh
+
 
   handlers:
     - name: reboot

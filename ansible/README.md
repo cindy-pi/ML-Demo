@@ -29,6 +29,7 @@ ansible [core 2.13.4]
 
 run
 ```
+./ping-all.sh
 ansible-playbook playbooks/globals.yaml
 ```
 
