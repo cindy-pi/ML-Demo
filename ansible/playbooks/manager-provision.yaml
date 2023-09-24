@@ -129,6 +129,12 @@
     - name: "Deploy Private Docker repo"
       shell: ./deployRegistry.sh
 
+    - name: "Copy blinkt from local to Manager Node"
+      ansible.builtin.copy:
+        src: files/blinkt/
+        dest: ./blinkt/
+        mode: '777'
+
 
   handlers:
     - name: reboot
