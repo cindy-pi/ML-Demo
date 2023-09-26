@@ -135,6 +135,12 @@
         dest: ./blinkt/
         mode: '777'
 
+    - name: "Copy blinkt from local to Manager Node"
+      ansible.builtin.copy:
+        src: files/demo/
+        dest: ./demo/
+        mode: '777'
+
 
   handlers:
     - name: reboot
