@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Button App</title>
+    <style>
+        button {
+            display: block;
+            margin: 10px auto;
+            width: 600px;
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+    {% for button in button_states %}
+        <button id="button{{ button['Title'] }}" onclick="toggleButton('{{ button['Title'] }}')" style="background-color: {{ button['Color'] }};">{{ button['Title'] }}</button>
+    {% endfor %}
+
+<script>
+    function toggleButton(buttonId) {
+        var elemId = "button" + buttonId;
+        var buttonElem = document.getElementById(elemId);
+        
+        fetch('/toggle/' + buttonId).then(function(response) {
+            return response.json();
+        }).then(function(data) {
+            data.updatedButtons.forEach(function(button) {
+                var buttonElem = document.getElementById("button" + button.id);
+                buttonElem.style.backgroundColor = button.color;
+                buttonElem.innerHTML = button.text;
+            });
+        });
+    }
+</script>
+</body>
+</html>
+
+
+
