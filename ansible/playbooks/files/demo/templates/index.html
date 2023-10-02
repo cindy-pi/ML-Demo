@@ -21,6 +21,7 @@
     function toggleButton(buttonId) {
         var elemId = "button" + buttonId;
         var buttonElem = document.getElementById(elemId);
+        buttonElem.style.backgroundColor = "salmon";
         
         fetch('/toggle/' + buttonId).then(function(response) {
             return response.json();

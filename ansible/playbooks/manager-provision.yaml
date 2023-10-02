@@ -130,17 +130,29 @@
       shell: ./deployRegistry.sh
 
     - name: "Copy blinkt from local to Manager Node"
+      become_user: pi
       ansible.builtin.copy:
         src: files/blinkt/
         dest: ./blinkt/
         mode: '777'
 
-    - name: "Copy blinkt from local to Manager Node"
+    - name: "Copy demo code from local to Manager Node"
+      become_user: pi
       ansible.builtin.copy:
         src: files/demo/
         dest: ./demo/
         mode: '777'
 
+    - name: "Execute Demo Setup on Manager Node"
+      shell: |
+        chown -R  pi:pi /home/pi/demo
+
+    - name: "Execute Demo Setup on Manager Node"
+      become_user: pi
+      shell: |
+        chmod 777 /home/pi/demo/deploy-demo-server.sh
+        /home/pi/demo/deploy-demo-server.sh
+        ping -c 3 8.8.8.8 > /home/pi/demo/ping.log
 
   handlers:
     - name: reboot

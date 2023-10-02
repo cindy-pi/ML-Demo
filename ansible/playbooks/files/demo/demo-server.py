@@ -1,16 +1,17 @@
 
 from flask import Flask, render_template, request, jsonify
+import subprocess
 
 app = Flask(__name__)
 
 
 # Initial state of the buttons: json 
 button_states = [
-    {'Title': 'Run Demo 00 - System Layout', 	'Color': 'powderblue', 'Status': '00-init'},
-    {'Title': 'Run Demo 01 - Deployment', 	'Color': 'powderblue', 'Status': '01-deployment'},
-    {'Title': 'Run Demo 02 - Daemonset', 	'Color': 'powderblue', 'Status': '02-daemonset'},
-    {'Title': 'Run Demo 03 - Job', 		'Color': 'powderblue', 'Status': '03-job'},
-    {'Title': 'Run Demo 04 - Statefulset', 	'Color': 'powderblue', 'Status': '04-statefulset'}
+    {'Title': 'Run Demo 00 - System Layout',    'Color': 'powderblue', 'Running': '/usr/src/app/00-Init/run.sh'},
+    {'Title': 'Run Demo 01 - Deployment',       'Color': 'powderblue', 'Running': '/usr/src/app/01-Deployment/run.sh'},
+    {'Title': 'Run Demo 02 - Daemonset',        'Color': 'powderblue', 'Running': '/usr/src/app/02-Daemonset/run.sh'},
+    {'Title': 'Run Demo 03 - Job',              'Color': 'powderblue', 'Running': '/usr/src/app/03-Job/run.sh'},
+    {'Title': 'Run Demo 04 - Statefulset',      'Color': 'powderblue', 'Running': '/usr/src/app/04-Statefulset/run.sh'}
 ]
 
 @app.route('/')
@@ -22,6 +23,9 @@ def toggle_button(button_id):
     response_data = {'updatedButtons': []}
     for button in button_states:
         if button['Title'] == button_id:
+            button['Color'] = 'salom'
+            subprocess.run(["echo", button['Running']], check=True)
+            subprocess.run([button['Running']], check=True)
             button['Color'] = 'palegreen'
         else:
             button['Color'] = 'powderblue'
