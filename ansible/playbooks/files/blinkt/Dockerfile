@@ -26,4 +26,5 @@ WORKDIR /opt/python/venv
 COPY setLights.py .
 COPY init.sh .
 COPY monitor.sh .
+COPY reset.sh .
 
