@@ -136,11 +136,11 @@
         dest: ./blinkt/
         mode: '777'
 
-    - name: "Execute Demo Setup on Manager Node"
+    - name: "Deploy blinkt monitor"
       become_user: pi
       shell: |
-        chmod 777 /home/pi/files/deploy.sh
-        /home/pi/files/deploy.sh
+        chmod 777 /home/pi/blinkt/deploy.sh
+        /home/pi/blinkt/deploy.sh
 
     - name: "Copy demo code from local to Manager Node"
       become_user: pi
