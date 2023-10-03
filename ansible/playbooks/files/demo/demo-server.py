@@ -7,12 +7,13 @@ app = Flask(__name__)
 
 # Initial state of the buttons: json 
 button_states = [
-    {'Title': 'Run Demo 00 - System Layout',    'Color': 'powderblue', 'Running': '/usr/src/app/00-Init/run.sh'},
-    {'Title': 'Run Demo 01 - Deployment',       'Color': 'powderblue', 'Running': '/usr/src/app/01-Deployment/run.sh'},
-    {'Title': 'Run Demo 02 - Daemonset',        'Color': 'powderblue', 'Running': '/usr/src/app/02-Daemonset/run.sh'},
-    {'Title': 'Run Demo 03 - Job',              'Color': 'powderblue', 'Running': '/usr/src/app/03-Job/run.sh'},
-    {'Title': 'Run Demo 04 - Statefulset',      'Color': 'powderblue', 'Running': '/usr/src/app/04-Statefulset/run.sh'}
+    {'Title': 'Run Demo 00 - System Layout',    'Color': 'powderblue', 'Running': './00-Init/run.sh'},
+    {'Title': 'Run Demo 01 - Deployment',       'Color': 'powderblue', 'Running': './01-Deployment/run.sh'},
+    {'Title': 'Run Demo 02 - Scale Up',         'Color': 'powderblue', 'Running': './02-ScaleUp/run.sh'},
+    {'Title': 'Run Demo 03 - Scale Down',       'Color': 'powderblue', 'Running': './03-ScaleDown/run.sh'},
+    {'Title': 'Run Demo 04 - Statefulset',      'Color': 'powderblue', 'Running': './04-Statefulset/run.sh'}
 ]
+
 
 @app.route('/')
 def index():
