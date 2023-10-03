@@ -12,7 +12,6 @@ button_states = [
     {'Title': 'Run Demo 02 - Scale Up to 8 Pods Nginx', 	'Color': 'powderblue', 'Running': './02-ScaleUp/run.sh'},
     {'Title': 'Run Demo 03 - Remove Workload off Manager Node',	'Color': 'powderblue', 'Running': './03-ManagerNode/run.sh'},
     {'Title': 'Run Demo 02 - Scale Down to 3 Pods Nginx', 	'Color': 'powderblue', 'Running': './04-ScaleDown/run.sh'},
-    {'Title': 'Run Demo 04 - Statefulset',      		'Color': 'powderblue', 'Running': './04-Statefulset/run.sh'},
     {'Title': 'Run Demo 99 - Reset',    	  		'Color': 'powderblue', 'Running': './99-Reset/run.sh'}
 ]
 
