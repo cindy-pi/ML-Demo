@@ -3,10 +3,10 @@ kind: ConfigMap
 metadata:
   name: nginx-config
 data:
-  index.html: |
+  index.html.template: |
     <h1>Nginx Pod Info</h1>
-    <p>Node Name: ${NODE_NAME}</p>
-    <p>Pod Hostname: ${POD_HOSTNAME}</p>
+    <p>Worker Node Name : NODE_NAME</p>
+    <p>Unique Pod Name  : POD_HOSTNAME</p>
   nginx.conf: |
     server {
       listen 80;
@@ -14,9 +14,6 @@ data:
       location / {
         root /usr/share/nginx/html;
         index index.html;
-        sub_filter '${NODE_NAME}' $node_name;
-        sub_filter '${POD_HOSTNAME}' $pod_hostname;
-        sub_filter_once off;
       }
     }
 

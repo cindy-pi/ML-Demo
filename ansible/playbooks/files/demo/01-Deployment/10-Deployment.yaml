@@ -1,4 +1,3 @@
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,6 +14,10 @@ spec:
     spec:
       containers:
       - name: nginx
+        command:
+        - /bin/sh
+        - -c
+        - 'sed "s/NODE_NAME/${NODE_NAME}/g" /usr/share/nginx/html/index.html.template | sed "s/POD_HOSTNAME/${POD_HOSTNAME}/g" > /usr/share/nginx/html/index.html; nginx -g "daemon off;" '
         image: nginx:alpine
         env:
         - name: NODE_NAME
@@ -27,13 +30,12 @@ spec:
               fieldPath: metadata.name
         volumeMounts:
         - name: nginx-config
-          mountPath: /etc/nginx/conf.d
+          mountPath: /etc/nginx/conf.d/nginx.conf
           subPath: nginx.conf
         - name: nginx-config
-          mountPath: /usr/share/nginx/html/index.html
-          subPath: index.html
+          mountPath: /usr/share/nginx/html/index.html.template
+          subPath: index.html.template
       volumes:
       - name: nginx-config
         configMap:
           name: nginx-config
-
