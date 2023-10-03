@@ -136,7 +136,6 @@
         mode: '777'
 
     - name: "Deploy blinkt monitor"
-      become_user: pi
       shell: |
         cd /home/pi/blinkt/
         chmod 777 ./deploy.sh
