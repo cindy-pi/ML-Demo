@@ -136,6 +136,12 @@
         dest: ./blinkt/
         mode: '777'
 
+    - name: "Execute Demo Setup on Manager Node"
+      become_user: pi
+      shell: |
+        chmod 777 /home/pi/files/deploy.sh
+        /home/pi/files/deploy.sh
+
     - name: "Copy demo code from local to Manager Node"
       become_user: pi
       ansible.builtin.copy:
@@ -152,7 +158,6 @@
       shell: |
         chmod 777 /home/pi/demo/deploy-demo-server.sh
         /home/pi/demo/deploy-demo-server.sh
-        ping -c 3 8.8.8.8 > /home/pi/demo/ping.log
 
   handlers:
     - name: reboot
