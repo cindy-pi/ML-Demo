@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 cd 04-ScaleDown
