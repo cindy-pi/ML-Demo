@@ -22,7 +22,7 @@ EOF
 
 rm /etc/profile.d/raspi-config.sh
 
-sudo sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+sudo sed -i 's/^# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
 sudo locale-gen
 sudo update-locale LC_ALL=en_US.UTF-8
 
