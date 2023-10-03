@@ -1,3 +1,5 @@
+#!/bin/bash
+
 cd 00-Init
 kubectl apply -f ./00-Init.yaml
 sleep 3
