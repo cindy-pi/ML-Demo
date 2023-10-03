@@ -34,4 +34,7 @@ else
   echo Registry is already running
 fi
 
+sudo groupadd docker.
+sudo usermod -aG docker pi
+
 

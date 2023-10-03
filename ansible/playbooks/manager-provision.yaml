@@ -139,8 +139,9 @@
     - name: "Deploy blinkt monitor"
       become_user: pi
       shell: |
-        chmod 777 /home/pi/blinkt/deploy.sh
-        /home/pi/blinkt/deploy.sh
+        cd /home/pi/blinkt/
+        chmod 777 ./deploy.sh
+        ./deploy.sh
 
     - name: "Copy demo code from local to Manager Node"
       become_user: pi
