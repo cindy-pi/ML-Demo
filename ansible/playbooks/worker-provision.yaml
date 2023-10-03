@@ -81,6 +81,13 @@
       become_user: pi
       shell: echo ". ~/.profile ; export KUBECONFIG=/etc/rancher/k3s/k3s.internal.yaml" > ~/.bash_profile
 
+    #- name: "Change Evistion Timeout from 600 sec to 30 sec"
+      #shell: |
+        #echo "    --kubelet-arg eviction-max-pod-grace-period=30" >>   /etc/systemd/system/k3s-agent.service
+        #systemctl daemon-reload
+        #systemctl restart k3s-agent
+        #chown -R  pi:pi /home/pi/demo
+
   handlers:
     - name: reboot
       reboot:

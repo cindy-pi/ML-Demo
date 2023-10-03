@@ -158,6 +158,13 @@
         chmod 777 /home/pi/demo/deploy-demo-server.sh
         /home/pi/demo/deploy-demo-server.sh
 
+    #- name: "Change Evistion Timeout from 600 sec to 30 sec"
+      #shell: |
+        #echo "    --kubelet-arg eviction-max-pod-grace-period=30" >>   /etc/systemd/system/k3s.service
+        #systemctl daemon-reload
+        #systemctl restart k3s
+        #chown -R  pi:pi /home/pi/demo
+
   handlers:
     - name: reboot
       reboot:
