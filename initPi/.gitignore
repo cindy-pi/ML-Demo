@@ -1,7 +1,5 @@
 
 id_rsa*
-run.sh
-run*.sh
 *.img
 *.log
 userconf.txt

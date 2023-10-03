@@ -1,4 +1,4 @@
-
+#!/bin/bash
 
 cd 02-ScaleUp
 

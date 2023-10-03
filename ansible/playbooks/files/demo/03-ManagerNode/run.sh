@@ -1,4 +1,4 @@
-
+#!/bin/bash
 
 cd 03-ManagerNode
 
