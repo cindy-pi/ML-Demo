@@ -130,7 +130,6 @@
       shell: ./deployRegistry.sh
 
     - name: "Copy blinkt from local to Manager Node"
-      become_user: pi
       ansible.builtin.copy:
         src: files/blinkt/
         dest: ./blinkt/

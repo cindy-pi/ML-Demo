@@ -7,13 +7,13 @@ app = Flask(__name__)
 
 # Initial state of the buttons: json 
 button_states = [
-    {'Title': 'Run Demo 00 - Identify Nodes',    'Color': 'powderblue', 'Running': './00-Init/run.sh'},
-    {'Title': 'Run Demo 01 - Deploy 3 Pod NginX',       'Color': 'powderblue', 'Running': './01-Deployment/run.sh'},
-    {'Title': 'Run Demo 02 - Scale Up to 6 Pods Nginx',         'Color': 'powderblue', 'Running': './02-ScaleUp/run.sh'},
-    {'Title': 'Run Demo 03 - Scale Down to 3 Pods Nginx',       'Color': 'powderblue', 'Running': './03-ScaleDown/run.sh'},
-    {'Title': 'Run Demo 04 - Statefulset',      'Color': 'powderblue', 'Running': './04-Statefulset/run.sh'}
+    {'Title': 'Run Demo 00 - Identify Nodes',   	 	'Color': 'powderblue', 'Running': './00-Init/run.sh'},
+    {'Title': 'Run Demo 01 - Deploy 3 Pod NginX',     		'Color': 'powderblue', 'Running': './01-Deployment/run.sh'},
+    {'Title': 'Run Demo 02 - Scale Up to 8 Pods Nginx', 	'Color': 'powderblue', 'Running': './02-ScaleUp/run.sh'},
+    {'Title': 'Run Demo 03 - Remove Workload off Manager Node',	'Color': 'powderblue', 'Running': './03-ManagerNode/run.sh'},
+    {'Title': 'Run Demo 02 - Scale Down to 3 Pods Nginx', 	'Color': 'powderblue', 'Running': './04-ScaleDown/run.sh'},
+    {'Title': 'Run Demo 04 - Statefulset',      		'Color': 'powderblue', 'Running': './04-Statefulset/run.sh'}
 ]
-
 
 @app.route('/')
 def index():
