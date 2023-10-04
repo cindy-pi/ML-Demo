@@ -151,6 +151,8 @@
     - name: "Execute Demo Setup on Manager Node"
       shell: |
         chown -R  pi:pi /home/pi/demo
+        groupadd docker
+        usermod -aG docker pi
 
     - name: "Execute Demo Setup on Manager Node"
       become_user: pi
