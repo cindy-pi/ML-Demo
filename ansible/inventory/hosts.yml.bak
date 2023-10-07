@@ -1,0 +1,18 @@
+
+manager:
+  hosts:
+    pi05.local:
+
+worker:
+  hosts:
+    pi06.local:
+    pi07.local:
+    pi08.local:
+
+cluster:
+  children:
+    manager:
+    worker:
+
+
+

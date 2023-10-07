@@ -1,0 +1,20 @@
+# 1. MAKING THE SYSTEM WORK. DO NOT REMOVE
+mount -t tmpfs tmp /run
+mkdir -p /run/systemd
+mount / -o remount,rw
+sed -i 's| init=.*||' /boot/cmdline.txt
+
+# 2. THE USEFUL PART OF THE SCRIPT
+# Example:
+
+/boot/firstboot.sh
+rm /boot/firstboot.sh
+
+# 3. CLEANING UP AND REBOOTING
+sync
+umount /boot
+mount / -o remount,ro
+sync
+echo 1 > /proc/sys/kernel/sysrq
+echo b > /proc/sysrq-trigger
+sleep 5
