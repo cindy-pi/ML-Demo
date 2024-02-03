@@ -20,6 +20,18 @@ metadata:
 type: kubernetes.io/service-account-token
 EOF
 
+TOKEN=`kubectl create token -n $NAMESPACE $SERVICE_ACCT_NAME --duration=4194967296s`
+TOKEN_ENCODED=`echo $TOKEN | base64 -w 0`
+
+kubectl get secret  -n $NAMESPACE $SERVICE_ACCT_NAME -o json | \
+  jq 'del(.metadata.annotations."kubectl.kubernetes.io/last-applied-configuration")' | \
+  jq 'del(.metadata.annotations."deployment.kubernetes.io/revision")' | \
+  jq 'del(.metadata.creationTimestamp)' | \
+  jq 'del(.metadata.generation)' | \
+  jq 'del(.metadata.resourceVersion)' | \
+  jq 'del(.metadata.uid)' | \
+  jq --arg TOKEN_ENCODED "$TOKEN_ENCODED" '.data.token |= $TOKEN_ENCODED ' | \
+  kubectl apply -f -
 kubectl apply -n $NAMESPACE -f - <<EOF
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
