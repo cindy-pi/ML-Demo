@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Path to the LED control
+LED_PATH="/sys/class/leds/ACT"
+
+# Save the current trigger to restore it later
+CURRENT_TRIGGER=$(cat "$LED_PATH/trigger" | sed -n 's/.*\[\(.*\)\].*/\1/p')
+
+# Turn off the default trigger
+echo "none" > "$LED_PATH/trigger"
+
+# Turn on the LED
+echo 1 > "$LED_PATH/brightness"
+
+# Wait for 5 seconds
+sleep 5
+
+# Turn off the LED
+echo 0 > "$LED_PATH/brightness"
+
+# Restore the original trigger
+echo "$CURRENT_TRIGGER" > "$LED_PATH/trigger"

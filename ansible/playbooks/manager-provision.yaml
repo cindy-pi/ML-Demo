@@ -110,6 +110,12 @@
         dest: /usr/bin/k9s
         mode: '777'
 
+    - name: "Install blinker"
+      ansible.builtin.copy:
+        src: files/blinker
+        dest: /usr/bin/blinker
+        mode: '777'
+
     - name: "Push Internal kubeconfig file"
       ansible.builtin.copy:
         src: files/internal.kubeconfig
